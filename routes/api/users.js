@@ -3,6 +3,8 @@ const router = express.Router()
 const { check, validationResult } = require('express-validator/check')
 const gravatar = require('gravatar')
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+const config = require('config')
 
 const User = require('../../models/Users')
 
@@ -12,6 +14,8 @@ const validations = [
     check('password', 'Please the password need to be at least 5 chars').isLength({ min: 5 }),
     check('name', 'Name is required').not().isEmpty()
 ]
+
+const jwtExpiration = process.env === 'production' ? 3600 : 3600000
 
 const gravatarOptions = {
     s: '200',
@@ -29,6 +33,7 @@ router.get('/', (req, res) => res.send('User get route'))
 // @access  Public
 router.post('/register', validations, async (req, res) => {
     try {
+        console.log('expiresIn: ', jwtExpiration)
         const { email, name, password } = req.body
         const errors = validationResult(req)
         if (!errors.isEmpty()) {
@@ -55,7 +60,22 @@ router.post('/register', validations, async (req, res) => {
         })
 
         await userInstance.save()
-        res.send('User registered successfully')
+        const payload = {
+            user: {
+                id: userInstance.id
+            }
+        }
+
+        jwt.sign(
+            payload,
+            config.get('jwtSecret'),
+            { expiresIn: jwtExpiration },
+            (err, token) => {
+                if (err) throw err
+                res.json({ token })
+            }
+        )
+
     } catch (e) {
         console.error(e.message)
         res.status(500).send('Server Error')

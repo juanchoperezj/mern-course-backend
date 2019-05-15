@@ -1,3 +1,4 @@
 {
-  "mongoURI": "mongodb+srv://mern_user:12312344@mern-connector-2syqq.mongodb.net/test?retryWrites=true"
+  "mongoURI": "mongodb+srv://mern_user:12312344@mern-connector-2syqq.mongodb.net/test?retryWrites=true",
+  "jwtSecret": "mernCourseToken"
 }
