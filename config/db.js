@@ -6,7 +6,8 @@ const connectDB = async () => {
     try {
         const dbOptions = {
             useNewUrlParser: true,
-            useCreateIndex: true
+            useCreateIndex: true,
+            useFindAndModify: false
         }
 
         await mongoose.connect(db, dbOptions)
