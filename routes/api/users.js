@@ -33,16 +33,17 @@ router.get('/', (req, res) => res.send('User get route'))
 // @access  Public
 router.post('/register', validations, async (req, res) => {
     try {
-        console.log('expiresIn: ', jwtExpiration)
+        // console.log('expiresIn: ', jwtExpiration)
         const { email, name, password } = req.body
         const errors = validationResult(req)
         if (!errors.isEmpty()) {
-            res.status(400).json({ errors: errors.array() })
+            console.log('here')
+            return res.status(400).send({ errors: errors.array() })
         }
         // see if user exists
         let userInstance = await User.findOne({ email })
         if (userInstance) {
-            res.status(400).json({ errors: [{ msg: 'User is already registered' }] })
+            return res.status(400).json({ errors: [{ msg: 'User is already registered' }] })
         }
 
         // get the user Gravatar
