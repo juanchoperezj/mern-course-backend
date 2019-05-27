@@ -1,7 +1,10 @@
 import React, { Fragment, useState } from 'react';
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import { login } from "../../../actions/auth";
+import PropTypes from 'prop-types'
 
-const Login = () => {
+const Login = ({ login, isAuthenticated, loading }) => {
     const [loginData, setLoginData] = useState({
         email: '',
         password: ''
@@ -11,13 +14,22 @@ const Login = () => {
     const { email, password } = loginData
     const onSubmit = e => {
         e.preventDefault()
-
+        login({ email, password })
     }
+
+    if (loading) {
+        return <p>Loading</p>
+    }
+
+    if (isAuthenticated && !loading) {
+        return <Redirect to={'/dashboard'}/>
+    }
+
     return (
         <Fragment>
             <h1 className="large text-primary">Sign In</h1>
             <p className="lead"><i className="fas fa-user"></i> Sign into Your Account</p>
-            <form className="form" action="dashboard.html">
+            <form className="form" onSubmit={onSubmit}>
                 <div className="form-group">
                     <input
                         type="email"
@@ -37,7 +49,7 @@ const Login = () => {
                         onChange={onChange}
                     />
                 </div>
-                <input type="submit" className="btn btn-primary" value="Login" onSubmit={onSubmit}/>
+                <input type="submit" className="btn btn-primary" value="Login"/>
             </form>
             <p className="my-1">
                 Don't have an account? <Link to="/register">Sign Up</Link>
@@ -48,6 +60,14 @@ const Login = () => {
 
 Login.defaultProps = {};
 
-Login.propTypes = {};
+Login.propTypes = {
+    login: PropTypes.func,
+    isAuthenticated: PropTypes.bool
+};
 
-export default Login;
+const mapStateToProps = (state) => ({
+    isAuthenticated: state.auth.isAuthenticated,
+    loading: state.auth.loading
+})
+
+export default connect(mapStateToProps, { login })(Login);

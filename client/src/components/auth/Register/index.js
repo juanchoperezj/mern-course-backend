@@ -1,11 +1,11 @@
 import React, { Fragment, useState } from 'react';
 import { connect } from "react-redux";
 import PropTypes from 'prop-types';
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { setAlert } from "../../../actions/alert";
 import { register } from "../../../actions/auth";
 
-const Register = ({ setAlert, register }) => {
+const Register = ({ setAlert, register, isAuthenticated }) => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -24,6 +24,11 @@ const Register = ({ setAlert, register }) => {
         await register({ name, email, password })
     }
     const { name, email, password, password2 } = formData
+
+    if (isAuthenticated) {
+        return <Redirect to={'/dashboard'}/>
+    }
+
     return (
         <Fragment>
             <h1 className="large text-primary">Sign Up</h1>
@@ -73,7 +78,12 @@ Register.defaultProps = {};
 
 Register.propTypes = {
     setAlert: PropTypes.func,
-    register: PropTypes.func
+    register: PropTypes.func,
+    isAuthenticated: PropTypes.bool
 };
 
-export default connect(null, { setAlert, register })(Register);
+const mapStateToProps = (state) => ({
+    isAuthenticated: state.auth.isAuthenticated
+})
+
+export default connect(mapStateToProps, { setAlert, register })(Register);

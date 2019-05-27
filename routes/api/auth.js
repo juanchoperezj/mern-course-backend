@@ -38,7 +38,7 @@ router.post('/', validations, async (req, res) => {
         const { email, password } = req.body
         const errors = validationResult(req)
         if (!errors.isEmpty()) {
-            res.status(400).json({ errors: errors.array() })
+            return res.status(400).json({ errors: errors.array() })
         }
         // see if user exists
         let userInstance = await User.findOne({ email })
@@ -61,7 +61,7 @@ router.post('/', validations, async (req, res) => {
             { expiresIn: jwtExpiration },
             (err, token) => {
                 if (err) throw err
-                res.json({ token })
+                return res.json({ token })
             }
         )
 
