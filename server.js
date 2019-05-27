@@ -1,29 +1,23 @@
 const express = require('express')
-const mongoose = require('mongoose')
-
 const app = express()
+const connectDB = require('./config/db')
+const cors = require('cors')
 
-// routes declarations
-const users = require('./routes/api/users')
-const profile = require('./routes/api/profile')
-const posts = require('./routes/api/posts')
+// make the db connection
+connectDB()
 
-// DB config
-const db = require('./config/keys').mongoURI
-
-// make mongodb connection
-mongoose.connect(db)
-    .then(() => console.log('mongo db connection successfully'))
-    .catch(err => console.log('error connection with mongo, err: ', err))
+// Init middleware
+app.use(cors())
+app.use(express.json({ extended: false }))
 
 const port = process.env.PORT || 5000
 
-// routes implementations
-app.use('/api/users', users)
-app.use('/api/posts', posts)
-app.use('/api/profile', profile)
-
 app.listen(port, () => console.log(`server running on port: ${port}`))
 
-app.get('/', (req, res) => res.send('Hello World'))
+// app.get('/', (req, res) => res.send('Hello World'))
 
+// define routes
+app.use('/api/users', require('./routes/api/users'))
+app.use('/api/posts', require('./routes/api/posts'))
+app.use('/api/auth', require('./routes/api/auth'))
+app.use('/api/profile', require('./routes/api/profile'))
