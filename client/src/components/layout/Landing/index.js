@@ -2,8 +2,12 @@ import React from 'react';
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from 'prop-types'
+import Spinner from '../Spinner'
 
-const Landing = ({ isAuthenticated }) => {
+const Landing = ({ isAuthenticated, loading }) => {
+    if (loading) {
+        return <Spinner/>
+    }
     if (isAuthenticated) {
         return <Redirect to={'/dashboard'}/>
     }
@@ -28,11 +32,13 @@ const Landing = ({ isAuthenticated }) => {
 }
 
 Landing.propTypes = {
-    isAuthenticated: PropTypes.bool
+    isAuthenticated: PropTypes.bool,
+    loading: PropTypes.bool,
 }
 
 const mapStateToProps = (state) => ({
-    isAuthenticated: state.auth.isAuthenticated
+    isAuthenticated: state.auth.isAuthenticated,
+    loading: state.auth.loading
 })
 
 export default connect(mapStateToProps, null)(Landing);

@@ -12,6 +12,8 @@ import store from './store'
 import Alert from './components/layout/Alert'
 import { setAuthToken } from "./utils/setAuthToken";
 import { loadUser } from "./actions/auth";
+import CreateProfile from "./components/profile-form/CreateProfile";
+import EditProfile from "./components/profile-form/EditProfile";
 
 
 if (localStorage.token) {
@@ -33,6 +35,8 @@ const App = () => {
                         <Switch>
                             <Route exact path={'/register'} component={Register}/>
                             <Route exact path={'/login'} component={Login}/>
+                            <PrivateRoute exact redirectRoute={'/login'} path={'/create-profile'} component={CreateProfile}/>
+                            <PrivateRoute exact redirectRoute={'/login'} path={'/edit-profile'} component={EditProfile}/>
                             <PrivateRoute exact redirectRoute={'/login'} path={'/dashboard'} component={Dashboard}/>
                         </Switch>
                     </section>
