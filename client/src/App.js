@@ -14,6 +14,10 @@ import { setAuthToken } from "./utils/setAuthToken";
 import { loadUser } from "./actions/auth";
 import CreateProfile from "./components/profile-form/CreateProfile";
 import EditProfile from "./components/profile-form/EditProfile";
+import AddExperience from "./components/profile-form/AddExperience";
+import AddEducation from "./components/profile-form/AddEducation";
+import Profiles from "./components/profiles/Profiles";
+import Profile from './components/profile'
 
 
 if (localStorage.token) {
@@ -35,8 +39,16 @@ const App = () => {
                         <Switch>
                             <Route exact path={'/register'} component={Register}/>
                             <Route exact path={'/login'} component={Login}/>
-                            <PrivateRoute exact redirectRoute={'/login'} path={'/create-profile'} component={CreateProfile}/>
-                            <PrivateRoute exact redirectRoute={'/login'} path={'/edit-profile'} component={EditProfile}/>
+                            <Route exact path={'/profiles'} component={Profiles}/>
+                            <Route exact path={'/profile/:id'} component={Profile}/>
+                            <PrivateRoute exact redirectRoute={'/login'} path={'/create-profile'}
+                                          component={CreateProfile}/>
+                            <PrivateRoute exact redirectRoute={'/login'} path={'/edit-profile'}
+                                          component={EditProfile}/>
+                            <PrivateRoute exact redirectRoute={'/login'} path={'/add-experience'}
+                                          component={AddExperience}/>
+                            <PrivateRoute exact redirectRoute={'/login'} path={'/add-education'}
+                                          component={AddEducation}/>
                             <PrivateRoute exact redirectRoute={'/login'} path={'/dashboard'} component={Dashboard}/>
                         </Switch>
                     </section>

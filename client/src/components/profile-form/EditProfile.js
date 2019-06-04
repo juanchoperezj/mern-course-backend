@@ -28,9 +28,19 @@ const EditProfile = ({ profile: { profile, loading }, createProfile, getCurrentP
 
     useEffect(() => {
         getCurrentProfile()
-        !loading && setFormData(profile)
-        if (!loading && profile.hasOwnProperty('social')) toggleSocialInputs(!displaySocialInputs)
-    }, [loading])
+        const hasSocialNetworks = !loading && profile.hasOwnProperty('social')
+        toggleSocialInputs(hasSocialNetworks)
+        let tmp = {}
+
+        if (!hasSocialNetworks) {
+            tmp = {
+                ...profile,
+                social: {}
+            }
+        } else tmp = profile
+
+        !loading && setFormData(tmp)
+    }, [loading, getCurrentProfile, profile])
 
     const {
         company,
@@ -70,7 +80,7 @@ const EditProfile = ({ profile: { profile, loading }, createProfile, getCurrentP
     return (
         <Fragment>
             <h1 className="large text-primary">
-                Create Your Profile
+                Edit Your Profile
             </h1>
             <p className="lead">
                 <i className="fas fa-user"></i> Let's get some information to make your
