@@ -10,7 +10,7 @@ const Profiles = ({ profile: { profiles, loading }, getProfiles }) => {
         getProfiles()
     }, [getProfiles])
 
-    const renderProfiles = data => data.map(profile => <ProfileItem {...profile}/>)
+    const renderProfiles = data => data.map(profile => <ProfileItem {...profile} key={profile._id}/>)
 
     return (
         <Fragment>

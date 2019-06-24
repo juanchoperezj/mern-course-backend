@@ -28,7 +28,7 @@ const ProfileItem = ({ user: { _id, name, avatar }, status, company, location, s
 };
 
 ProfileItem.propTypes = {
-    profile: PropTypes.object.isRequired
+    // profile: PropTypes.object.isRequired
 };
 
 export default ProfileItem;

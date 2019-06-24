@@ -40,7 +40,7 @@ const EditProfile = ({ profile: { profile, loading }, createProfile, getCurrentP
         } else tmp = profile
 
         !loading && setFormData(tmp)
-    }, [loading, getCurrentProfile, profile])
+    }, [])
 
     const {
         company,
@@ -71,6 +71,7 @@ const EditProfile = ({ profile: { profile, loading }, createProfile, getCurrentP
     const onSubmit = e => {
         e.preventDefault()
         createProfile(formData, history, true)
+        window.scrollTo({ top: 0, behavior: 'smooth' })
     }
 
     if (loading) {

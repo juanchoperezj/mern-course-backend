@@ -170,7 +170,7 @@ export const getProfileById = userId => async dispatch => {
 }
 
 export const getGithubRepos = username => async dispatch => {
-    dispatch({ type: CLEAR_PROFILE })
+    // dispatch({ type: CLEAR_PROFILE })
     try {
         const res = await axios.get(`http://localhost:5000/api/profile/github/${username}`)
         dispatch({ type: GET_REPOS, payload: res.data })

@@ -18,6 +18,8 @@ import AddExperience from "./components/profile-form/AddExperience";
 import AddEducation from "./components/profile-form/AddEducation";
 import Profiles from "./components/profiles/Profiles";
 import Profile from './components/profile'
+import Posts from './components/posts'
+import Post from './components/post'
 
 
 if (localStorage.token) {
@@ -50,6 +52,8 @@ const App = () => {
                             <PrivateRoute exact redirectRoute={'/login'} path={'/add-education'}
                                           component={AddEducation}/>
                             <PrivateRoute exact redirectRoute={'/login'} path={'/dashboard'} component={Dashboard}/>
+                            <PrivateRoute exact redirectRoute={'/login'} path={'/posts'} component={Posts}/>
+                            <PrivateRoute exact redirectRoute={'/login'} path={'/post/:id'} component={Post}/>
                         </Switch>
                     </section>
                 </Fragment>
