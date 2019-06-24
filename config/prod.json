@@ -1,0 +1,6 @@
+{
+  "mongoURI": "mongodb+srv://mern_user:12312344@mern-connector-2syqq.mongodb.net/test?retryWrites=true",
+  "jwtSecret": "mernCourseToken",
+  "githubClientId": "fa55ad8dcc2ef9f44fdb",
+  "githubClientSecret": "7af9caaf8f002ed334df2bd9f5d87608f0561661"
+}

@@ -5,6 +5,7 @@ const config = require('config')
 const auth = require('../../middleware/auth')
 const Profile = require('../../models/Profile')
 const User = require('../../models/Users')
+const Post = require('../../models/Posts')
 const { check, validationResult } = require('express-validator/check')
 
 
@@ -37,13 +38,14 @@ router.get('/me', auth, async (req, res) => {
         if (!profile) {
             return res.status(400).json({ errors: [{ msg: 'There is no profile for this user' }] })
         }
+        return res.json(profile)
     } catch (e) {
         console.error(e)
         res.status(500).send('Server error')
     }
 })
 
-// @route   POST api/profile/me
+// @route   POST api/profile
 // @desc    Create / update profile
 // @access  Private
 router.post('/', [auth, postProfileValidations], async (req, res) => {
@@ -55,15 +57,21 @@ router.post('/', [auth, postProfileValidations], async (req, res) => {
     }
 
     const profileBody = Object.assign({}, req.body.profile)
-    const profileFields = {
+    let profileFields = {
         user: userId
     }
 
-    Object.keys(profileBody).map((key, index) => {
-        if (profileBody[key] && key === 'skills') {
-            profileFields[key] = profileBody[key].split(',').map((skill, k) => skill.trim())
-        } else profileFields[key] = profileBody[key]
-    })
+    console.log('profileBody', profileBody)
+
+    if (!profileBody.edit) {
+        Object.keys(profileBody).map((key, index) => {
+            if (profileBody[key] && key === 'skills') {
+                profileFields[key] = profileBody[key].split(',').map((skill, k) => skill.trim())
+            } else profileFields[key] = profileBody[key]
+        })
+    } else {
+        profileFields = profileBody
+    }
 
     try {
         let profile = await Profile.findOne({ user: userId })
@@ -130,6 +138,7 @@ router.delete('/', auth, async (req, res) => {
     try {
         const { id } = req.user
 
+        await Post.deleteMany({ user: id })
         // remove profile
         await Profile.findOneAndRemove({ user: id })
         // remove user
@@ -245,7 +254,7 @@ router.get('/github/:username', async (req, res) => {
             return res.status(404).json({ msg: 'No github profile found' })
         }
 
-        res.json(JSON.parse(body))
+        return res.json(JSON.parse(body))
     })
 })
 
